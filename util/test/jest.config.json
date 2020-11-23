@@ -1,0 +1,5 @@
+{
+  "rootDir": "../..",
+  "testPathIgnorePatterns": ["/node_modules/", "/dist/", "/utinpm l/"],
+  "setupFilesAfterEnv": ["<rootDir>/util/test/jest.setup.js"]
+}

@@ -7,11 +7,11 @@ module.exports = {
   mode: 'production',
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '..', './src/index.html'),
+      template: path.resolve(__dirname, '../..', './src/index.html'),
     }),
     new CleanWebpackPlugin(),
     new Dotenv({
-      path: path.resolve(__dirname, '..', `./.env.prod`),
+      path: path.resolve(__dirname, '../..', `./.env.prod`),
     }),
   ],
   devtool: 'source-map',

@@ -4,9 +4,10 @@
   "description": "Front end for Midwoofery CMS API",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack serve --config build-tools/webpack.config.js --env env=dev",
-    "build": "webpack --config build-tools/webpack.config.js --env env=prod"
+    "test": "jest --config ./util/test/jest.config.json",
+    "test:watch": "npm run test -- --watch",
+    "dev": "webpack serve --config util/build/webpack.config.js --env env=dev",
+    "build": "webpack --config util/build/webpack.config.js --env env=prod"
   },
   "repository": {
     "type": "git",
@@ -20,10 +21,12 @@
     "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.12.7",
     "@babel/preset-react": "^7.12.7",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.3.1",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.1",
     "clean-webpack-plugin": "^3.0.0",
     "dotenv-webpack": "^5.1.0",
+    "enzyme": "^3.11.0",
     "eslint": "^7.2.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-loader": "^4.0.2",
@@ -32,6 +35,8 @@
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.0.0",
     "html-webpack-plugin": "^4.5.0",
+    "jest": "^26.6.3",
+    "jest-fetch-mock": "^3.0.3",
     "react-hot-loader": "^4.13.0",
     "webpack": "^5.6.0",
     "webpack-cli": "^4.2.0",
