@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 
 import App from './App';
 
-const title = 'Midwoofery CMS front end!';
-
-ReactDOM.render(<App title={title} />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app'));
 
 module.hot.accept();
