@@ -1,59 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 // import PropTypes from 'prop-types';
 
+// Material-UI version of normalize.css
+import CssBaseLine from '@material-ui/core/CssBaseline';
+
 import Login from '../Login';
-import Dogs from '../Dogs';
 
 const App = () => {
+  console.log('running');
   // Initial state setup
-  const [breederId, setbreederId] = useState(false);
-  const [breeders, setBreeders] = useState([]);
-  const [activeBreeder, setActiveBreeder] = useState({});
+  // const [token, setToken] = useState('');
+  // const [user, setUser] = useState({});
+  // const [loggedIn, setLoggedIn] = useState(false);
 
   // Helper functions
-  const loadBreeders = async () => {
-    const res = await fetch(`${process.env.API_BASE}/breeders`);
-    const data = await res.json();
-    setBreeders(data);
-  };
-
-  const loadActiveBreeder = async () => {
-    const res = await fetch(`${process.env.API_BASE}/breeders/${breederId}`);
-    const data = await res.json();
-    setActiveBreeder(data);
-  };
-
-  // Effect on initial load
-  useEffect(() => {
-    loadBreeders();
-  }, []);
 
   // Effect when breeder is logged in
-  useEffect(() => {
-    if (breederId === false) {
-      setActiveBreeder({});
-      return;
-    }
-    loadActiveBreeder(breederId);
-  }, [breederId]);
+  // useEffect(() => {
+  //   if (breederId === false) {
+  //     setActiveBreeder({});
+  //     return;
+  //   }
+  //   loadActiveBreeder(breederId);
+  // }, [breederId]);
 
   return (
     <div>
-      <button
-        type="button"
-        onClick={() => {
-          setbreederId(false);
-          setActiveBreeder({});
-        }}
-      >
-        Reset
-      </button>
-      <Login
-        breeders={breeders}
-        isVisible={!breederId}
-        setbreederId={setbreederId}
-      />
-      <Dogs breeder={activeBreeder} />
+      <CssBaseLine />
+      <Login />
     </div>
   );
 };

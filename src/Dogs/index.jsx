@@ -1,3 +1,8 @@
+/*
+ * THIS IS OLD!
+ * It's from before auth was added to the API
+ * Fix it, or start from scratch
+
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
@@ -49,3 +54,4 @@ Dogs.propTypes = {
 };
 
 export default Dogs;
+*/
