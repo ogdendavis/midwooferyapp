@@ -42,8 +42,8 @@ const Login = () => {
   // State to manage input entry
   const [values, setValues] = useState({
     email: '',
-    pass: '',
-    showPass: false,
+    password: '',
+    showPassword: false,
   });
 
   const handleInput = (prop) => (event) => {
@@ -51,11 +51,35 @@ const Login = () => {
   };
 
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPass: !values.showPass });
+    setValues({ ...values, showPassword: !values.showPassword });
   };
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+
+  const sendLogin = async () => {
+    const loginDetails = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: values.email,
+        password: values.password,
+      }),
+    };
+    const response = await fetch(
+      `${process.env.API_BASE}/auth/login`,
+      loginDetails,
+    );
+    const data = await response.json();
+    console.log(data);
+  };
+
+  const handleKeyPress = (event) => {
+    // char code for Enter is 13
+    if (event.key === 'Enter' || event.charCode === 13) {
+      sendLogin();
+    }
   };
 
   return (
@@ -68,6 +92,7 @@ const Login = () => {
             label="email"
             value={values.email}
             onChange={handleInput('email')}
+            onKeyPress={handleKeyPress}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -83,9 +108,10 @@ const Login = () => {
             <InputLabel htmlFor="password">password*</InputLabel>
             <Input
               id="password"
-              type={values.showPass ? 'text' : 'password'}
-              value={values.pass}
-              onChange={handleInput('pass')}
+              type={values.showPassword ? 'text' : 'password'}
+              value={values.password}
+              onChange={handleInput('password')}
+              onKeyPress={handleKeyPress}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -93,7 +119,7 @@ const Login = () => {
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
                   >
-                    {values.showPass ? <Visibility /> : <VisibilityOff />}
+                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
               }
@@ -103,6 +129,7 @@ const Login = () => {
           <Button
             variant="contained"
             color="primary"
+            onClick={sendLogin}
             className={classes.loginButton}
           >
             Log In
