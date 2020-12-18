@@ -17,6 +17,8 @@ import {
 
 import { Email, Visibility, VisibilityOff } from '@material-ui/icons';
 
+import Register from './register';
+
 const useStyles = makeStyles({
   loginForm: {
     paddingTop: '15%',
@@ -24,15 +26,6 @@ const useStyles = makeStyles({
 
   mainErrorArea: {
     height: '2rem',
-  },
-
-  regArea: {
-    paddingTop: '15%',
-    fontSize: '0.85em',
-    '& p': {
-      textAlign: 'center',
-      marginBottom: '0.5em',
-    },
   },
 });
 
@@ -189,18 +182,7 @@ const Login = (props) => {
           </Button>
         </Grid>
       </form>
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-        className={classes.regArea}
-      >
-        <p>Not registered yet?</p>
-        <Button variant="outlined" color="primary" size="small">
-          Create Account
-        </Button>
-      </Grid>
+      <Register />
     </Container>
   );
 };
