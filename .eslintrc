@@ -3,7 +3,8 @@
   "extends": ["airbnb"],
   "rules": {
     "object-curly-newline": 1,
-    "react/jsx-wrap-multilines": 1
+    "react/jsx-wrap-multilines": 0,
+    "operator-linebreak": 0
   },
   "env": {
     "browser": true

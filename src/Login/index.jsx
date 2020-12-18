@@ -6,6 +6,7 @@ import {
   Button,
   Container,
   FormControl,
+  FormHelperText,
   Grid,
   IconButton,
   Input,
@@ -21,8 +22,8 @@ const useStyles = makeStyles({
     paddingTop: '15%',
   },
 
-  loginButton: {
-    marginTop: '1rem',
+  mainErrorArea: {
+    height: '2rem',
   },
 
   regArea: {
@@ -43,11 +44,38 @@ const Login = () => {
   const [values, setValues] = useState({
     email: '',
     password: '',
+    emailIsValid: true,
+    passwordIsValid: true,
     showPassword: false,
+    mainError: false,
+    mainErrorMessage: ' ',
   });
 
+  const isEmailValid = (email) => {
+    const regex = /^\w+[+.\w-]*@([\w-]+\.)*\w+[\w-]*\.([a-z]{2,4}|\d+)$/i;
+    return email === '' ? true : regex.test(email);
+  };
+
+  const isPasswordValid = (pw) => pw.length > 4;
+
+  const isAllInputValid = () => {
+    const email = values.email === '' ? false : isEmailValid(values.email);
+    const password = isPasswordValid(values.password);
+    return email && password;
+  };
+
   const handleInput = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
+    const inputValidation = {
+      emailIsValid: values.emailIsValid,
+      passwordIsValid: values.passwordIsValid,
+    };
+    if (prop === 'email') {
+      inputValidation.emailIsValid = isEmailValid(event.target.value);
+    } else if (prop === 'password') {
+      inputValidation.passwordIsValid = isPasswordValid(event.target.value);
+    }
+
+    setValues({ ...values, [prop]: event.target.value, ...inputValidation });
   };
 
   const handleClickShowPassword = () => {
@@ -58,7 +86,16 @@ const Login = () => {
     event.preventDefault();
   };
 
-  const sendLogin = async () => {
+  const submitLogin = async () => {
+    if (!isAllInputValid()) {
+      setValues({
+        ...values,
+        mainError: true,
+        mainErrorMessage: 'Please enter valid login credentials',
+      });
+      return;
+    }
+    setValues({ ...values, mainError: false, mainErrorMessage: ' ' });
     const loginDetails = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -78,7 +115,7 @@ const Login = () => {
   const handleKeyPress = (event) => {
     // char code for Enter is 13
     if (event.key === 'Enter' || event.charCode === 13) {
-      sendLogin();
+      submitLogin();
     }
   };
 
@@ -91,6 +128,7 @@ const Login = () => {
             id="email"
             label="email"
             value={values.email}
+            error={!values.emailIsValid}
             onChange={handleInput('email')}
             onKeyPress={handleKeyPress}
             InputProps={{
@@ -105,11 +143,12 @@ const Login = () => {
             required
           />
           <FormControl>
-            <InputLabel htmlFor="password">password*</InputLabel>
+            <InputLabel htmlFor="password">password *</InputLabel>
             <Input
               id="password"
               type={values.showPassword ? 'text' : 'password'}
               value={values.password}
+              error={!values.passwordIsValid}
               onChange={handleInput('password')}
               onKeyPress={handleKeyPress}
               endAdornment={
@@ -126,12 +165,13 @@ const Login = () => {
               required
             />
           </FormControl>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={sendLogin}
-            className={classes.loginButton}
+          <FormHelperText
+            error={values.mainError}
+            className={classes.mainInputArea}
           >
+            {values.mainErrorMessage}
+          </FormHelperText>
+          <Button variant="contained" color="primary" onClick={submitLogin}>
             Log In
           </Button>
         </Grid>
