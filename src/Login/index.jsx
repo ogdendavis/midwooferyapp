@@ -109,6 +109,19 @@ const Login = () => {
       loginDetails,
     );
     const data = await response.json();
+    // Handle bad credentials
+    if (Object.prototype.hasOwnProperty.call(data, 'invalid')) {
+      setValues({
+        ...values,
+        mainError: true,
+        mainErrorMessage: data.message,
+        password: '',
+        [data.invalid]: '',
+        [`${data.invalid}IsValid`]: false,
+      });
+      return;
+    }
+    // Handle good credentials
     console.log(data);
   };
 
