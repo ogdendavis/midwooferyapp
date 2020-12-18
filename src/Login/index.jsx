@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import {
   makeStyles,
@@ -36,7 +36,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Login = () => {
+const Login = (props) => {
   // Set up styling classes
   const classes = useStyles();
 
@@ -121,8 +121,8 @@ const Login = () => {
       });
       return;
     }
-    // Handle good credentials
-    console.log(data);
+    // Handle good credentials by passing token and user back up to App
+    props.handleStateUpdate({ ...data, loggedIn: true });
   };
 
   const handleKeyPress = (event) => {
@@ -205,10 +205,8 @@ const Login = () => {
   );
 };
 
-// Login.propTypes = {
-//   breeders: PropTypes.arrayOf(PropTypes.object).isRequired,
-//   isVisible: PropTypes.bool.isRequired,
-//   setbreederId: PropTypes.func.isRequired,
-// };
+Login.propTypes = {
+  handleStateUpdate: PropTypes.func.isRequired,
+};
 
 export default Login;

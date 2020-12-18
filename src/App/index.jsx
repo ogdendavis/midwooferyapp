@@ -1,33 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 // import PropTypes from 'prop-types';
 
 // Material-UI version of normalize.css
 import CssBaseLine from '@material-ui/core/CssBaseline';
 
 import Login from '../Login';
+import Dashboard from '../Dashboard';
 
 const App = () => {
-  console.log('running');
-  // Initial state setup
-  // const [token, setToken] = useState('');
-  // const [user, setUser] = useState({});
-  // const [loggedIn, setLoggedIn] = useState(false);
+  const [appState, setAppState] = useState({
+    token: '',
+    user: {},
+    loggedIn: false,
+  });
 
-  // Helper functions
-
-  // Effect when breeder is logged in
-  // useEffect(() => {
-  //   if (breederId === false) {
-  //     setActiveBreeder({});
-  //     return;
-  //   }
-  //   loadActiveBreeder(breederId);
-  // }, [breederId]);
+  const handleStateUpdate = (update) => {
+    setAppState({ ...appState, ...update });
+  };
 
   return (
     <div>
       <CssBaseLine />
-      <Login />
+      {!appState.loggedIn && <Login handleStateUpdate={handleStateUpdate} />}
+      {appState.loggedIn && (
+        <Dashboard handleStateUpdate={handleStateUpdate} appState={appState} />
+      )}
     </div>
   );
 };
