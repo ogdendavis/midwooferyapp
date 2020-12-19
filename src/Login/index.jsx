@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import {
   makeStyles,
   Button,
+  Checkbox,
   Container,
   FormControl,
+  FormControlLabel,
   FormHelperText,
   Grid,
   IconButton,
@@ -42,6 +44,7 @@ const Login = (props) => {
     showPassword: false,
     mainError: false,
     mainErrorMessage: ' ',
+    trust: false,
   });
 
   const isEmailValid = (email) => {
@@ -67,8 +70,9 @@ const Login = (props) => {
     } else if (prop === 'password') {
       inputValidation.passwordIsValid = isPasswordValid(event.target.value);
     }
-
-    setValues({ ...values, [prop]: event.target.value, ...inputValidation });
+    const updated =
+      prop === 'trust' ? event.target.checked : event.target.value;
+    setValues({ ...values, [prop]: updated, ...inputValidation });
   };
 
   const handleClickShowPassword = () => {
@@ -115,7 +119,7 @@ const Login = (props) => {
       return;
     }
     // Handle good credentials by passing token and user back up to App
-    props.handleStateUpdate({ ...data, loggedIn: true });
+    props.loginFunc({ ...data, trust: values.trust });
   };
 
   const handleKeyPress = (event) => {
@@ -180,6 +184,16 @@ const Login = (props) => {
           <Button variant="contained" color="primary" onClick={submitLogin}>
             Log In
           </Button>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={values.trust}
+                onChange={handleInput('trust')}
+                name="trust"
+              />
+            }
+            label="Trust this computer?"
+          />
         </Grid>
       </form>
       <Register />
@@ -188,7 +202,7 @@ const Login = (props) => {
 };
 
 Login.propTypes = {
-  handleStateUpdate: PropTypes.func.isRequired,
+  loginFunc: PropTypes.func.isRequired,
 };
 
 export default Login;
