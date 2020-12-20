@@ -24,7 +24,7 @@ const App = () => {
   const login = (creds) => {
     const { user, token, trust } = creds;
     // Set info in app state -- this is what we actually use
-    setAppState({ ...appState, ...creds, loggedIn: true });
+    setAppState({ ...appState, user, token, loggedIn: true });
     // Save values in localStorage, so we can persist logged in use on
     // page refresh or when coming back in the same browser
     setLocal({ user, token }, trust);

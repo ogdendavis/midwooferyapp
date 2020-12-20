@@ -1,16 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button } from '@material-ui/core';
+import Header from './Header';
 
 const Dashboard = (props) => {
   const { appState, logoutFunc } = props;
+  const [dashState, setDashState] = useState({
+    activeTab: 0,
+  });
+
+  const setActiveTab = (tab) => {
+    setDashState({ ...dashState, activeTab: tab });
+  };
+
   return (
     <div>
-      {`Hello, ${appState.user.firstname}!`}
-      <Button variant="outlined" size="small" onClick={logoutFunc}>
-        Logout
-      </Button>
+      <Header
+        logoutFunc={logoutFunc}
+        activeTab={dashState.activeTab}
+        setActiveTab={setActiveTab}
+      />
+      <p>{`Hello, ${appState.user.firstname}!`}</p>
+      <p>{`You are on tab ${dashState.activeTab}`}</p>
     </div>
   );
 };
