@@ -1,42 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  makeStyles,
-  AppBar,
-  IconButton,
-  Toolbar,
-  Typography,
-} from '@material-ui/core';
+import { makeStyles, AppBar, IconButton, Toolbar } from '@material-ui/core';
 
 import { AccountCircle } from '@material-ui/icons';
 
 import NavTabs from './NavTabs';
 
 const useStyles = makeStyles(() => ({
-  titleArea: {
+  spacer: {
     flexGrow: 1,
-    textAlign: 'center',
   },
-  title: {
-    fontSize: '2rem',
+  toolbar: {
+    alignItems: 'flex-end',
   },
 }));
 
 const Header = (props) => {
-  const { logoutFunc, activeTab, setActiveTab } = props;
+  const { activeTab, setActiveTab, toggleSettingsDrawer } = props;
   const classes = useStyles();
 
   return (
     <AppBar position="static">
-      <Toolbar>
+      <Toolbar className={classes.toolbar}>
         <NavTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-        <div className={classes.titleArea}>
-          <Typography variant="h1" className={classes.title}>
-            Midwoofery CMS Dashboard
-          </Typography>
-        </div>
-        <IconButton aria-label="show user settings" onClick={logoutFunc}>
+        <div className={classes.spacer} />
+        <IconButton
+          aria-label="show user settings"
+          onClick={toggleSettingsDrawer}
+        >
           <AccountCircle fontSize="large" />
         </IconButton>
       </Toolbar>
@@ -45,9 +37,9 @@ const Header = (props) => {
 };
 
 Header.propTypes = {
-  logoutFunc: PropTypes.func.isRequired,
   activeTab: PropTypes.number.isRequired,
   setActiveTab: PropTypes.func.isRequired,
+  toggleSettingsDrawer: PropTypes.func.isRequired,
 };
 
 export default Header;
