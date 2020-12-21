@@ -17,9 +17,9 @@ const App = () => {
   };
   const [appState, setAppState] = useState(starterState);
 
-  const handleStateUpdate = (update) => {
-    setAppState({ ...appState, ...update });
-  };
+  // const handleStateUpdate = (update) => {
+  //   setAppState({ ...appState, ...update });
+  // };
 
   const login = (creds) => {
     const { user, token, trust } = creds;
@@ -51,13 +51,7 @@ const App = () => {
     <div>
       <CssBaseLine />
       {!appState.loggedIn && <Login loginFunc={login} />}
-      {appState.loggedIn && (
-        <Dashboard
-          handleStateUpdate={handleStateUpdate}
-          appState={appState}
-          logoutFunc={logout}
-        />
-      )}
+      {appState.loggedIn && <Dashboard logoutFunc={logout} />}
     </div>
   );
 };

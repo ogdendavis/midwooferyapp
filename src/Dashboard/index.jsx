@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Header from './Header';
+// "Pages"
+import Home from './Home';
+import Dogs from './Dogs';
+import Litters from './Litters';
+import About from './About';
+
+// Components
+import Header from './_Header';
+import TabPanel from './_TabPanel';
 
 const Dashboard = (props) => {
-  const { appState, logoutFunc } = props;
+  const { logoutFunc } = props;
   const [dashState, setDashState] = useState({
     activeTab: 0,
   });
 
-  const setActiveTab = (tab) => {
-    setDashState({ ...dashState, activeTab: tab });
+  const setActiveTab = (e, val) => {
+    setDashState({ ...dashState, activeTab: val });
   };
 
   return (
@@ -20,21 +28,31 @@ const Dashboard = (props) => {
         activeTab={dashState.activeTab}
         setActiveTab={setActiveTab}
       />
-      <p>{`Hello, ${appState.user.firstname}!`}</p>
-      <p>{`You are on tab ${dashState.activeTab}`}</p>
+      <TabPanel activeTab={dashState.activeTab} index={0}>
+        <Home />
+      </TabPanel>
+      <TabPanel activeTab={dashState.activeTab} index={1}>
+        <Dogs />
+      </TabPanel>
+      <TabPanel activeTab={dashState.activeTab} index={2}>
+        <Litters />
+      </TabPanel>
+      <TabPanel activeTab={dashState.activeTab} index={3}>
+        <About />
+      </TabPanel>
     </div>
   );
 };
 
 Dashboard.propTypes = {
   // handleStateUpdate: PropTypes.func.isRequired,
-  appState: PropTypes.shape({
-    token: PropTypes.string.isRequired,
-    user: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      firstname: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
+  // appState: PropTypes.shape({
+  //   token: PropTypes.string.isRequired,
+  //   user: PropTypes.shape({
+  //     id: PropTypes.string.isRequired,
+  //     firstname: PropTypes.string.isRequired,
+  //   }),
+  // }).isRequired,
   logoutFunc: PropTypes.func.isRequired,
 };
 
