@@ -51,7 +51,9 @@ const App = () => {
     <div>
       <CssBaseLine />
       {!appState.loggedIn && <Login loginFunc={login} />}
-      {appState.loggedIn && <Dashboard logoutFunc={logout} />}
+      {appState.loggedIn && (
+        <Dashboard logoutFunc={logout} appState={appState} />
+      )}
     </div>
   );
 };
