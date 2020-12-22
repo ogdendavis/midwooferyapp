@@ -14,10 +14,11 @@ const Settings = (props) => {
   const { settingsOpen, toggleSettingsDrawer, logoutFunc } = props;
   const classes = useStyles();
 
-  // Log out and return to login screen
+  // Clear app state, wipe localStorage, and return to login screen
   const history = useHistory();
-  const completeLogout = () => {
-    logoutFunc();
+  const completeLogout = async () => {
+    await logoutFunc();
+    localStorage.clear();
     history.push('/');
   };
 
@@ -31,9 +32,13 @@ const Settings = (props) => {
 };
 
 Settings.propTypes = {
-  settingsOpen: PropTypes.bool.isRequired,
+  settingsOpen: PropTypes.bool,
   toggleSettingsDrawer: PropTypes.func.isRequired,
   logoutFunc: PropTypes.func.isRequired,
+};
+
+Settings.defaultProps = {
+  settingsOpen: false,
 };
 
 export default Settings;

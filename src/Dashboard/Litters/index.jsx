@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import LitterCard from './_LitterCard';
 
 const Litters = (props) => {
-  const { dashState, setDashState } = props;
+  const { getDashState, setDashState } = props;
+  const dashState = getDashState();
   const { token, breeder, litters } = dashState;
 
   const loadLitters = async () => {
@@ -32,23 +33,7 @@ const Litters = (props) => {
 };
 
 Litters.propTypes = {
-  dashState: PropTypes.shape({
-    settingsOpen: PropTypes.bool.isRequired,
-    dogs: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-      }),
-    ),
-    litters: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-      }),
-    ),
-    breeder: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }),
-    token: PropTypes.string.isRequired,
-  }).isRequired,
+  getDashState: PropTypes.func.isRequired,
   setDashState: PropTypes.func.isRequired,
 };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core';
@@ -14,7 +14,8 @@ const useStyles = makeStyles({
 });
 
 const Dashboard = (props) => {
-  const { logoutFunc, appState } = props;
+  const { logoutFunc, getAppState } = props;
+  const appState = getAppState();
   const classes = useStyles();
 
   const initialState = {
@@ -24,12 +25,23 @@ const Dashboard = (props) => {
     breeder: appState.user,
     token: appState.token,
   };
-  const [dashState, setDashState] = useState(initialState);
+  const [dashState, setDashState] = useState(
+    JSON.parse(localStorage.getItem('dashState')) || initialState,
+  );
+
+  // Every time we update dashState, it's going into localStorage
+  // So get it out of localStorage, so data persists on reload
+  const getDashState = () => JSON.parse(localStorage.getItem('dashState')) || dashState;
+
+  // Save dashState in localStorage every time it is changed
+  useEffect(() => {
+    localStorage.setItem('dashState', JSON.stringify(dashState));
+  }, [dashState]);
 
   // Add clearing dashstate to logoutFunc
-  const logoutAndClearDashState = () => {
-    logoutFunc();
-    setDashState({});
+  const logoutAndClearDashState = async () => {
+    await logoutFunc();
+    await setDashState({ initialState });
   };
 
   const toggleSettingsDrawer = () => {
@@ -40,7 +52,7 @@ const Dashboard = (props) => {
     <>
       <Header toggleSettingsDrawer={toggleSettingsDrawer} />
       <main className={classes.main}>
-        <RouterRender dashState={dashState} setDashState={setDashState} />
+        <RouterRender getDashState={getDashState} setDashState={setDashState} />
       </main>
       <Settings
         settingsOpen={dashState.settingsOpen}
@@ -52,27 +64,16 @@ const Dashboard = (props) => {
 };
 
 Dashboard.propTypes = {
-  // handleStateUpdate: PropTypes.func.isRequired,
-  appState: PropTypes.shape({
-    token: PropTypes.string,
-    user: PropTypes.shape({
-      id: PropTypes.string,
-      firstname: PropTypes.string,
-    }),
-  }),
+  getAppState: PropTypes.func,
   logoutFunc: PropTypes.func,
 };
 
 Dashboard.defaultProps = {
-  appState: {
-    token: '',
-    user: {
-      id: '',
-      firstname: 'No props received',
-    },
+  getAppState() {
+    console.log('No getAppState received in Dashboard/index');
   },
   logoutFunc() {
-    console.log('No props received');
+    console.log('No logoutFunc received in Dashboard/index');
   },
 };
 
