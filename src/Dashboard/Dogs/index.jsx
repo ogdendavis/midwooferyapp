@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import DogCard from './_DogCard';
 
 const Dogs = (props) => {
-  const { token, breederId, dogs, setDogs } = props;
+  const { dashState, setDashState } = props;
+  const { token, breeder, dogs } = dashState;
 
   const loadDogs = async () => {
     const reqDeets = {
@@ -12,11 +13,11 @@ const Dogs = (props) => {
       headers: { Authorization: `Bearer ${token}` },
     };
     const res = await fetch(
-      `${process.env.API_BASE}/breeders/${breederId}/dogs`,
+      `${process.env.API_BASE}/breeders/${breeder.id}/dogs`,
       reqDeets,
     );
     const data = res.status === 200 ? await res.json() : [];
-    setDogs(data);
+    setDashState({ ...dashState, dogs: data });
   };
 
   useEffect(() => {
@@ -31,11 +32,24 @@ const Dogs = (props) => {
 };
 
 Dogs.propTypes = {
-  token: PropTypes.string.isRequired,
-  breederId: PropTypes.string.isRequired,
-  dogs: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string.isRequired }))
-    .isRequired,
-  setDogs: PropTypes.func.isRequired,
+  dashState: PropTypes.shape({
+    settingsOpen: PropTypes.bool.isRequired,
+    dogs: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      }),
+    ),
+    litters: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      }),
+    ),
+    breeder: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+    token: PropTypes.string.isRequired,
+  }).isRequired,
+  setDashState: PropTypes.func.isRequired,
 };
 
 export default Dogs;

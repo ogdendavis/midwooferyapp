@@ -17,13 +17,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Header = (props) => {
-  const { activeTab, setActiveTab, toggleSettingsDrawer } = props;
+  const { toggleSettingsDrawer } = props;
   const classes = useStyles();
 
   return (
     <AppBar position="static">
       <Toolbar className={classes.toolbar}>
-        <NavTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        <NavTabs />
         <div className={classes.spacer} />
         <IconButton
           aria-label="show user settings"
@@ -37,8 +37,6 @@ const Header = (props) => {
 };
 
 Header.propTypes = {
-  activeTab: PropTypes.number.isRequired,
-  setActiveTab: PropTypes.func.isRequired,
   toggleSettingsDrawer: PropTypes.func.isRequired,
 };
 

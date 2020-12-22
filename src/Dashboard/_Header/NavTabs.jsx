@@ -1,24 +1,46 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
+import { Route, Link } from 'react-router-dom';
 import { Tab, Tabs } from '@material-ui/core';
 
-const NavTabs = (props) => {
-  const { activeTab, setActiveTab } = props;
-
-  return (
-    <Tabs value={activeTab} onChange={setActiveTab} aria-label="Dashboard tabs">
-      <Tab label="Dashboard" id="tab-0" aria-controls="tabpanel-0" />
-      <Tab label="Dogs" id="tab-1" aria-controls="tabpanel-1" />
-      <Tab label="Litters" id="tab-2" aria-controls="tabpanel-2" />
-      <Tab label="About Me" id="tab-3" aria-controls="tabpanel-3" />
-    </Tabs>
-  );
-};
-
-NavTabs.propTypes = {
-  activeTab: PropTypes.number.isRequired,
-  setActiveTab: PropTypes.func.isRequired,
-};
+const NavTabs = () => (
+  <Route
+    path="/dashboard"
+    render={(history) => (
+      <Tabs
+        value={
+          history.location.pathname !== '/' ? history.location.pathname : false
+        }
+        aria-label="Dashboard tabs"
+      >
+        <Tab
+          label="Dashboard"
+          value="/dashboard/home"
+          component={Link}
+          to="/dashboard/home"
+        />
+        <Tab
+          label="Dogs"
+          value="/dashboard/dogs"
+          component={Link}
+          to="/dashboard/dogs"
+        />
+        <Tab
+          label="Litters"
+          value="/dashboard/litters"
+          component={Link}
+          to="/dashboard/litters"
+        />
+        <Tab
+          label="About Me"
+          value="/dashboard/about"
+          component={Link}
+          to="/dashboard/about"
+        />
+      </Tabs>
+    )}
+  />
+);
 
 export default NavTabs;

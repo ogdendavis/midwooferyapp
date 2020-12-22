@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import PropTypes from 'prop-types';
 
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 // Material-UI version of normalize.css
 import CssBaseLine from '@material-ui/core/CssBaseline';
 
@@ -48,13 +49,22 @@ const App = () => {
   }, []);
 
   return (
-    <div>
+    <BrowserRouter>
       <CssBaseLine />
-      {!appState.loggedIn && <Login loginFunc={login} />}
-      {appState.loggedIn && (
+      <Route exact path="/">
+        {!appState.loggedIn ? (
+          <Login loginFunc={login} />
+        ) : (
+          <Redirect push to="/dashboard/home" />
+        )}
+      </Route>
+      <Route exact path="/dashboard/*">
         <Dashboard logoutFunc={logout} appState={appState} />
-      )}
-    </div>
+      </Route>
+      <Route path="/login">
+        <Redirect to="/" />
+      </Route>
+    </BrowserRouter>
   );
 };
 
