@@ -13,6 +13,16 @@ module.exports = {
   devServer: {
     contentBase: path.resolve(__dirname, '../..', './dist'),
     hot: true,
+    historyApiFallback: true,
+    proxy: {
+      '/dashboard/*': {
+        target: 'http://localhost:8080/',
+        pathRewrite: { '^/dashboard': '' },
+      },
+    },
   },
   devtool: 'eval-source-map',
+  output: {
+    publicPath: '/',
+  },
 };
