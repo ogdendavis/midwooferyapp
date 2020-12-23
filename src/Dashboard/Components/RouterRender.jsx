@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 
-import Dogs from './Dogs';
-import Litters from './Litters';
-import About from './About';
-import Home from './Home';
+import Dogs from '../Dogs';
+import Litters from '../Litters';
+import About from '../About';
+import Home from '../Home';
 
 const RouterRender = (props) => {
   const { getDashState, setDashState } = props;

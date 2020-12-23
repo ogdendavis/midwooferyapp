@@ -1,11 +1,15 @@
+// Packages
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-
 import { makeStyles } from '@material-ui/core';
 
-import Header from './_Header';
-import Settings from './_Settings';
-import RouterRender from './_RouterRender';
+// Components
+import Header from './Components/Header';
+import Settings from './Components/Settings';
+import RouterRender from './Components/RouterRender';
+
+// Helpers
+import db from './_DataFetching';
 
 const useStyles = makeStyles({
   main: {
@@ -20,8 +24,8 @@ const Dashboard = (props) => {
 
   const initialState = {
     settingsOpen: false,
-    dogs: [],
     litters: [],
+    dogs: [],
     breeder: appState.user,
     token: appState.token,
   };
@@ -37,6 +41,20 @@ const Dashboard = (props) => {
   useEffect(() => {
     localStorage.setItem('dashState', JSON.stringify(dashState));
   }, [dashState]);
+
+  // Load dogs and litters on initial dashboard load
+  useEffect(async () => {
+    // Use callback to prevent attempt to update state asynchronously after component unmounts
+    let dashboardMounted = true;
+    const dogs = await db.get.dogs(appState);
+    const litters = await db.get.litters(appState);
+    if (dashboardMounted) {
+      setDashState({ ...dashState, dogs, litters });
+    }
+    return function () {
+      dashboardMounted = false;
+    };
+  }, []);
 
   // Add clearing dashstate to logoutFunc
   const logoutAndClearDashState = async () => {
