@@ -47,9 +47,13 @@ const App = () => {
         {!appState.loggedIn ? <Login loginFunc={login} /> : <Redirect push to="/dashboard/home" />}
       </Route>
       <Route exact path="/dashboard/*">
-        <Dashboard logoutFunc={logout} getAppState={getAppState} />
+        {!appState.loggedIn ? (
+          <Login loginFunc={login} />
+        ) : (
+          <Dashboard logoutFunc={logout} getAppState={getAppState} />
+        )}
       </Route>
-      <Route path="/login">
+      <Route path="*">
         <Redirect to="/" />
       </Route>
     </BrowserRouter>
