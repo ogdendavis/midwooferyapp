@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import PropTypes from 'prop-types';
 
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 // Material-UI version of normalize.css
 import CssBaseLine from '@material-ui/core/CssBaseline';
 
@@ -40,22 +40,46 @@ const App = () => {
     await setAppState(starterState);
   };
 
+  // On reload, webpack tries to serve from /. Get the actual requested route for redirect
+  // const actualTargetRoute =
+  //   window.location.pathname === '/' ? '/dashboard/home' : window.location.pathname;
+  // console.log(actualTargetRoute);
+  const validDashPaths = [
+    '/dashboard/home',
+    '/dashboard/dogs',
+    '/dashboard/litters',
+    '/dashboard/about',
+  ];
+  const getTargetPath = () => {
+    const winLoc = window.location.pathname;
+    if (validDashPaths.includes(winLoc)) {
+      return winLoc;
+    }
+    return validDashPaths[0];
+  };
+
   return (
     <BrowserRouter>
       <CssBaseLine />
-      <Route exact path="/">
-        {!appState.loggedIn ? <Login loginFunc={login} /> : <Redirect push to="/dashboard/home" />}
-      </Route>
-      <Route exact path="/dashboard/*">
-        {!appState.loggedIn ? (
-          <Login loginFunc={login} />
-        ) : (
-          <Dashboard logoutFunc={logout} getAppState={getAppState} />
-        )}
-      </Route>
-      <Route path="*">
-        <Redirect to="/" />
-      </Route>
+      <Switch>
+        <Route exact path={['/', '/login']}>
+          {!appState.loggedIn ? (
+            <Login loginFunc={login} />
+          ) : (
+            <Redirect push to={getTargetPath()} />
+          )}
+        </Route>
+        <Route path={validDashPaths}>
+          {!appState.loggedIn ? (
+            <Redirect push to="/login" />
+          ) : (
+            <Dashboard logoutFunc={logout} getAppState={getAppState} />
+          )}
+        </Route>
+        <Route path="*">
+          <Redirect to="/" />
+        </Route>
+      </Switch>
     </BrowserRouter>
   );
 };
