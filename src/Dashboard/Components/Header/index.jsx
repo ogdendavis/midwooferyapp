@@ -1,7 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { makeStyles, AppBar, IconButton, Toolbar } from '@material-ui/core';
+// prettier-ignore
+import {
+  makeStyles,
+  AppBar,
+  IconButton,
+  Toolbar,
+} from '@material-ui/core';
 
 import { AccountCircle } from '@material-ui/icons';
 
@@ -25,10 +31,7 @@ const Header = (props) => {
       <Toolbar className={classes.toolbar}>
         <NavTabs />
         <div className={classes.spacer} />
-        <IconButton
-          aria-label="show user settings"
-          onClick={toggleSettingsDrawer}
-        >
+        <IconButton aria-label="show user settings" onClick={toggleSettingsDrawer}>
           <AccountCircle fontSize="large" />
         </IconButton>
       </Toolbar>

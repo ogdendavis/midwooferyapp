@@ -51,7 +51,7 @@ const Dashboard = (props) => {
     if (dashboardMounted) {
       setDashState({ ...dashState, dogs, litters });
     }
-    return function () {
+    return function dashboardUnmount() {
       dashboardMounted = false;
     };
   }, []);
@@ -82,17 +82,8 @@ const Dashboard = (props) => {
 };
 
 Dashboard.propTypes = {
-  getAppState: PropTypes.func,
-  logoutFunc: PropTypes.func,
-};
-
-Dashboard.defaultProps = {
-  getAppState() {
-    console.log('No getAppState received in Dashboard/index');
-  },
-  logoutFunc() {
-    console.log('No logoutFunc received in Dashboard/index');
-  },
+  getAppState: PropTypes.func.isRequired,
+  logoutFunc: PropTypes.func.isRequired,
 };
 
 export default Dashboard;

@@ -70,8 +70,7 @@ const Login = (props) => {
     } else if (prop === 'password') {
       inputValidation.passwordIsValid = isPasswordValid(event.target.value);
     }
-    const updated =
-      prop === 'trust' ? event.target.checked : event.target.value;
+    const updated = prop === 'trust' ? event.target.checked : event.target.value;
     setValues({ ...values, [prop]: updated, ...inputValidation });
   };
 
@@ -101,10 +100,7 @@ const Login = (props) => {
         password: values.password,
       }),
     };
-    const response = await fetch(
-      `${process.env.API_BASE}/auth/login`,
-      loginDetails,
-    );
+    const response = await fetch(`${process.env.API_BASE}/auth/login`, loginDetails);
     const data = await response.json();
     // Handle bad credentials
     if (Object.prototype.hasOwnProperty.call(data, 'invalid')) {
@@ -128,6 +124,19 @@ const Login = (props) => {
       submitLogin();
     }
   };
+
+  // Defining password adornment
+  const passwordAdornment = (
+    <InputAdornment position="end">
+      <IconButton
+        aria-label="toggle password visibility"
+        onClick={handleClickShowPassword}
+        onMouseDown={handleMouseDownPassword}
+      >
+        {values.showPassword ? <Visibility /> : <VisibilityOff />}
+      </IconButton>
+    </InputAdornment>
+  );
 
   return (
     <Container maxWidth="sm">
@@ -161,24 +170,11 @@ const Login = (props) => {
               error={!values.passwordIsValid}
               onChange={handleInput('password')}
               onKeyPress={handleKeyPress}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                  >
-                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              }
+              endAdornment={passwordAdornment}
               required
             />
           </FormControl>
-          <FormHelperText
-            error={values.mainError}
-            className={classes.mainInputArea}
-          >
+          <FormHelperText error={values.mainError} className={classes.mainInputArea}>
             {values.mainErrorMessage}
           </FormHelperText>
           <Button variant="contained" color="primary" onClick={submitLogin}>
@@ -186,11 +182,7 @@ const Login = (props) => {
           </Button>
           <FormControlLabel
             control={
-              <Checkbox
-                checked={values.trust}
-                onChange={handleInput('trust')}
-                name="trust"
-              />
+              <Checkbox checked={values.trust} onChange={handleInput('trust')} name="trust" />
             }
             label="Trust this computer?"
           />

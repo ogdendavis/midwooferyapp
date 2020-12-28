@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
 
-import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+// prettier-ignore
+import {
+  BrowserRouter,
+  Route,
+  Redirect,
+  Switch,
+} from 'react-router-dom';
+
 // Material-UI version of normalize.css
 import CssBaseLine from '@material-ui/core/CssBaseline';
 
