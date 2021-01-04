@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 // prettier-ignore
@@ -18,6 +18,20 @@ const useStyles = makeStyles(() => ({
     borderRadius: '1rem',
     boxShadow:
       '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)',
+    position: 'relative',
+  },
+
+  cardLoading: {
+    '&:after': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      borderRadius: '1rem',
+      background: 'rgba(120,120,120,0.5)',
+      content: '""',
+    },
   },
 
   top: {
@@ -49,51 +63,90 @@ const useStyles = makeStyles(() => ({
 }));
 
 const DogCard = (props) => {
-  const { dog } = props;
+  const { dog, updateDog } = props;
 
   const classes = useStyles();
 
   const [vals, setVals] = useState({
+    dog,
+    fields: ['name', 'breed', 'weight', 'color', 'sex'],
+    loading: false,
     open: false,
+    cardClass: classes.card,
   });
 
   const toggle = () => {
     setVals({ ...vals, open: !vals.open });
   };
 
+  const getUpdatesFromInput = () => {
+    // Checks for differences between dog prop and dog in vals
+    // We only want to change the values that are present on the form
+    const updatedFields = vals.fields.filter((key) => dog[key] !== vals.dog[key]);
+    // Empty object to hold updates
+    const updates = {};
+    // Add value of updated fields to updates
+    updatedFields.forEach((field) => {
+      updates[field] = vals.dog[field];
+    });
+    return updates;
+  };
+
+  const handleClick = async () => {
+    // If toggle is open, save changes
+    if (vals.open) {
+      // Activate loading styles
+      await setVals({ ...vals, loading: true });
+      // Get update info from user input
+      const update = getUpdatesFromInput();
+      // Do the update
+      await updateDog({ id: dog.id, update });
+      // Deactivate loading state
+      setVals({ ...vals, loading: false });
+    }
+    // in all cases, toggle!
+    toggle();
+  };
+
+  const handleInput = (prop) => (event) => {
+    // Need to update dog in vals
+    setVals({ ...vals, dog: { ...vals.dog, [prop]: event.target.value } });
+  };
+
+  // Toggle card classes when loading state is activated or deactivated
+  useEffect(() => {
+    setVals({
+      ...vals,
+      cardClass: vals.loading === true ? `${classes.card} ${classes.cardLoading}` : classes.card,
+    });
+  }, [vals.loading]);
+
+  // Build input fields from allowed fields in vals
+  const TextInputs = vals.fields.map((key) => (
+    <TextField
+      value={vals.dog[key]}
+      label={key}
+      key={`${dog.id}-${key}-field`}
+      variant="outlined"
+      className={classes.dogInput}
+      onChange={handleInput(key)}
+    />
+  ));
+
   return (
-    <div className={classes.card}>
+    <div className={vals.cardClass}>
       <div className={classes.top}>
         <img src={dog.image} alt="Dog icon" />
         <div>
-          <h2>{dog.name}</h2>
+          <h2>{vals.dog.name}</h2>
           <Button variant="outlined" color="primary" size="small" onClick={toggle}>
             Edit
           </Button>
         </div>
       </div>
       <div className={classes.bottom} style={{ height: vals.open ? 'auto' : 0 }}>
-        <TextField value={dog.name} label="name" variant="outlined" className={classes.dogInput} />
-        <TextField
-          value={dog.breed}
-          label="breed"
-          variant="outlined"
-          className={classes.dogInput}
-        />
-        <TextField
-          value={dog.weight}
-          label="weight"
-          variant="outlined"
-          className={classes.dogInput}
-        />
-        <TextField
-          value={dog.color}
-          label="color"
-          variant="outlined"
-          className={classes.dogInput}
-        />
-        <TextField value={dog.sex} label="sex" variant="outlined" className={classes.dogInput} />
-        <IconButton color="primary" onClick={toggle}>
+        {TextInputs}
+        <IconButton color="primary" onClick={handleClick}>
           <Done color="primary" />
         </IconButton>
       </div>
@@ -111,6 +164,7 @@ DogCard.propTypes = {
     sex: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
   }).isRequired,
+  updateDog: PropTypes.func.isRequired,
 };
 
 export default DogCard;
