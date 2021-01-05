@@ -136,7 +136,7 @@ const DogCard = (props) => {
   return (
     <div className={vals.cardClass}>
       <div className={classes.top}>
-        <img src={dog.image} alt="Dog icon" />
+        <img src={`${process.env.API_BASE}/${dog.primaryImage}`} alt="Dog icon" />
         <div>
           <h2>{vals.dog.name}</h2>
           <Button variant="outlined" color="primary" size="small" onClick={toggle}>
@@ -162,7 +162,7 @@ DogCard.propTypes = {
     weight: PropTypes.number.isRequired,
     color: PropTypes.string.isRequired,
     sex: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
+    primaryImage: PropTypes.string.isRequired,
   }).isRequired,
   updateDog: PropTypes.func.isRequired,
 };

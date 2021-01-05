@@ -1,12 +1,3 @@
-// TEMP to randomize dog pics
-import icon1 from '../assets/dogIcons/afghan.jpg';
-import icon2 from '../assets/dogIcons/beagle.jpg';
-import icon3 from '../assets/dogIcons/malamute.jpg';
-import icon4 from '../assets/dogIcons/poodle.jpg';
-import icon5 from '../assets/dogIcons/spaniel.jpg';
-import icon6 from '../assets/dogIcons/terrier.jpg';
-// END TEMP
-
 const sendQuery = async ({ route, payload, headers }) => {
   // Make sure route has leading slash and add API base
   // prettier-ignore
@@ -55,24 +46,9 @@ const updateOneInDatabase = async (noun, id, update) => {
   return sendQuery({ route, payload, headers });
 };
 
-// TEMP to randomize dog pics
-const icons = [icon1, icon2, icon3, icon4, icon5, icon6];
-const dogsWithImages = async () => {
-  // Get the dogs
-  const dogs = await fetchAllFromDatabase('dogs');
-  // Insert images
-  const dogsImaged = dogs.map((d) => ({
-    ...d,
-    image: icons[Math.floor(Math.random() * dogs.length)],
-  }));
-  // Sort by alpha and return
-  return dogsImaged.sort((a, b) => (a.name < b.name ? -1 : 1));
-};
-// END TEMP
-
 const db = {
   get: {
-    dogs: () => dogsWithImages(),
+    dogs: () => fetchAllFromDatabase('dogs'),
     litters: () => fetchAllFromDatabase('litters'),
     breeder: () => fetchAllFromDatabase(''),
   },
